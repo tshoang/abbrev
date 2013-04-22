@@ -32,14 +32,6 @@
   }
 }
 
-\newcommand{\resetabbrev}{
-  Reset the following macros:\\
-  \renewcommand*{\do}[1]{
-    Macros: ##1 \\
-    \csuse{##1@init}
-  }
-  \dolistloop{\abbrev@list}
-}
 
 \newcommand{\abbrev@create}[3]{%
   \newtoggle{#1@toggle}
@@ -73,6 +65,12 @@
       \expandafter\def\csname#1s\endcsname{#2s\xspace}%
     }
   }
+}
+\newcommand{\resetabbrev}{
+  \renewcommand*{\do}[1]{
+    \csuse{##1@init}
+  }
+  \dolistloop{\abbrev@list}
 }
 \endinput
 %%

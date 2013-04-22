@@ -65,16 +65,26 @@
 % 
 % \GetFileInfo{abbrev.sty}
 % 
+% \DoNotIndex{\\}
+% \DoNotIndex{\DeclareOption}
+% \DoNotIndex{\ProcessOptions}
+% \DoNotIndex{\RequirePackage}
 % \DoNotIndex{\arabic}
-% \DoNotIndex{\newcommand,\renewcommand,\newenvironment,\renewenvironment}
-% \DoNotIndex{\newcounter,\value}
-% \DoNotIndex{\\,\hline}
-% \DoNotIndex{\begin,\end}
-% \DoNotIndex{\item,\medskip,\quad,\small}
-% \DoNotIndex{\label,\labelformat}
-% \DoNotIndex{\DeclareOption,\ProcessOptions,\RequirePackage}
-% \DoNotIndex{\ref,\refstepcounter,\setcounter}
-% \DoNotIndex{\textsf,\textwidth}
+% \DoNotIndex{\begin}
+% \DoNotIndex{\csname,\csuse}
+% \DoNotIndex{\def,\do,\dolistloop}
+% \DoNotIndex{\end,\endcsname,\expandafter}
+% \DoNotIndex{\hline}
+% \DoNotIndex{\ifstrequal,\iftoggle,\item}
+% \DoNotIndex{\label,\labelformat,\listadd}
+% \DoNotIndex{\medskip}
+% \DoNotIndex{\newcommand,\newcounter,\newenvironment,\newtoggle,\nomenclature}
+% \DoNotIndex{\quad}
+% \DoNotIndex{\renewcommand,\renewenvironment,\ref,\refstepcounter}
+% \DoNotIndex{\setcounter,\small}
+% \DoNotIndex{\textsf,\textwidth,\togglefalse,\toggletrue}
+% \DoNotIndex{\value}
+% \DoNotIndex{\xspace}
 %
 % \title{The \textsf{abbrev} package\thanks{This document
 % corresponds to \textsf{abbrev}~\fileversion, dated~\filedate.}}
@@ -98,7 +108,10 @@
 % \section{Introduction}
 % 
 % This package was developed in order to ease the typesetting of
-% abbreviations in \LaTeX{}.
+% abbreviations in \LaTeX{}.  Each abbreviation is associated with a
+% set of macros for typesetting.  Abbreviations are collected and can
+% be displayed in list of abbreviations by making use of package
+% |nomencl|.
 % 
 % ^^A %%%%% Usage %%%%%%
 % \section{Usage}
@@ -106,12 +119,77 @@
 % ^^A %%% Package option |compact| %%%
 % Just like any other package, you need to request this package with a
 % |\usepackage| command in the preamble.
+%
+% So in the simpler case, one just types
 % 
+% \indent |\usepackage{abbrev}|
+%
+% \noindent to load the package  
+%
+% The rest of this section is to give descriptions of the main
+% (meta-)macro for creating abbreviation macros and their expected
+% behaviour.
+% 
+% ^^A %%% \newabbrev macros %%%
+% \DescribeMacro{\newabbrev}
+% Macro |\newabbrev| is a meta-macro that creating several
+% abbreviation macros.  The signature of |\newabbrev| is as follows.
+%
+% \indent |\newabbrev|\oarg{csname}\marg{abbreviation}\marg{full string}
+%
+% The first optional argument is the \emph{control sequence} name that
+% will be use to create abbreviation macros.  If the first optional
+% argument is undefined, the second argument representing the
+% \emph{abbreviation} will be used as the control sequence.  The third
+% argument is the \emph{full expansion string} of for the abbreviation.
+%
+% An invocation of the above |\newabbrev| with control sequence
+% |csname| will create the following macros:
+% \begin{itemize}
+% \item |\csname|: Singular version of the abbreviation macro.
+% \item |\csnames|: Plural version of the abbreviation macro.
+% \end{itemize}
+% 
+% First time usage of |\csname| will be replaced by ``full string
+% (abbreviation)''.  Subsequent uses of |\csname| will be replaced by
+% ``abbreviation''. Macro |\csnams| is the plural version (with \emph{s}
+% after the ``full string'' and the ``abbreviation'' accordingly).
+%
+% \DescribeMacro{\resetabbrev}
+% The above expansion behaviour can be reset by calling
+% |\resetabbrev|.  Afterwards, |\csname| and |\csnames| will be
+% expanded the first time that they are used.
+% 
+% More information can be found in the accompanying sample document.
+%
+% \subsection{Creating a List of Abbreviations}
+% The list of abbreviations can be created by making use of package
+% |nomencl|.  Typically, one includes the following in the document
+% preamble.
+% 
+% \indent |\usepackage{nomencl}|
+%
+% \indent |\renewcommand{\nomname}{List of Abbreviations}|
+%
+% \indent |\makenomenclature|
+%
+% \noindent The following command from |nomencl| is used print the list
+% of abbreviations.
+%
+% \indent |\printnomenclature|
+%
+% Finally, use |makeindex| to compile and generate the list of
+% abbreviations appropriately.
+%
+% \indent |makeindex filename.nlo  -s nomencl.ist -o filename.nls|
+%
+% where |filename| is the name of the main .tex file.
+%
 % \StopEventually{
 % \PrintChanges
 % \PrintIndex
 % }
-%
+%   
 % ^^A %%%%% Implementation %%%%%
 % \section{Implementation}
 %
@@ -137,11 +215,10 @@
 %<reqdoc>
 % \fi ^^A END Produce comments only in the resulting style file
 %
-% In the subsequent, we define the main meta-macro for creating
-% abbreviation macros.
 % \begin{macro}{\newabbrev}
 %   \changes{v1.0}{2013/04/22}{Macro created}
-%   The |newabbrev|
+%   The |newabbrev| makes use of the worker macro |abbrev@create| for
+%   creating abbreviations macros.
 % 
 % \iffalse^^A BEGIN Produce comments only in the resulting style file
 %<*abbrev>
@@ -173,22 +250,15 @@
 %    \end{macrocode}
 % \end{macro} ^^A \newabbrev
 %
-% \begin{macro}{\resetabbrev}
-%   Reset the all abbreviation macros to full mode.
-%    \begin{macrocode}
-\newcommand{\resetabbrev}{
-  Reset the following macros:\\
-  \renewcommand*{\do}[1]{
-    Macros: ##1 \\
-    \csuse{##1@init}
-  }
-  \dolistloop{\abbrev@list}
-}
-%    \end{macrocode}
-% \end{macro}
 % \begin{macro}{\abbrev@create}
 %   The main worker meta-macro for creating the abbreviation macros is
-%   implemented as follows.
+%   implemented as follows.  It create a private toggle variable to
+%   be used to distinguish the first time usage of the abbreviation.
+%   The abbreviation is add to |abbrev@list| (for reseting
+%   abbreviation macros later).  It then call |abbrev@init| to create
+%   the initialisation macro, then call the initialisation macro
+%   afterward.
+%
 % \iffalse^^A BEGIN Produce comments only in the resulting style file
 %<*abbrev>
 
@@ -214,6 +284,13 @@
   \csuse{#1@init}
 }
 
+%    \end{macrocode}
+% \end{macro} ^^A \abbrev@create
+%
+% \begin{macro}{\abbrev@init}
+%   This macro create the initialisation meta-macro for creating the
+%   abbreviation macros.
+%    \begin{macrocode}
 \newcommand{\abbrev@init}[3]{%
   \expandafter\def\csname#1@init\endcsname{%
     \togglefalse{#1@toggle}
@@ -242,7 +319,19 @@
 }
 %    \end{macrocode}
 % \end{macro}
-%
+% \begin{macro}{\resetabbrev}
+%   Reset the all abbreviation macros to full expansion mode by going
+%   through |abbrev@list| and call the initialisation macro for each
+%   abbreviation.
+%    \begin{macrocode}
+\newcommand{\resetabbrev}{
+  \renewcommand*{\do}[1]{
+    \csuse{##1@init}
+  }
+  \dolistloop{\abbrev@list}
+}
+%    \end{macrocode}
+% \end{macro}
 %
 % \Finale
 \endinput
