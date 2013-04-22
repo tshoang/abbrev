@@ -1,0 +1,61 @@
+\title{A Sample Document for \textsf{abbrev} package}
+\author{Thai Son Hoang\\ETH Zurich\\\texttt{<htson at inf dot ethz dot
+    ch>}}
+
+\begin{document}
+\maketitle
+
+% Create some abbreviation macros
+\newabbrev{SME}{Small and Medium-sized Enterprise}
+\newabbrev[randd]{R\&D}{Research \& Development}
+% This macro will not be used and hence will not appear in the list of abbreviations.
+\newabbrev{OECD}{Organisational for Economic and Cooperation Development}
+
+\section{Section 1}
+\label{sec:section-1}
+
+\SMEs: first appearance of SME(s) and will be expanded.
+
+\SME: second appearance of SME(s) and will be abbreviated. 
+
+\randd: first appearance of R\&D(s) and will be expanded
+
+\randds: second appearance of R\&D(s) and will be abbreviated.
+
+\SMEs: third appearance of SME(s) and will be abbreviated.
+
+\randds: third appearance of R\&D(s) and will be abbreviated.
+
+\SMEs: fourth appearance of SME(s) and will be abbreviated.
+
+\randd: fourth appearance of R\&D(s) and will be abbreviated.
+
+\section{Section 2}
+\label{sec:section-2}
+
+\resetabbrev
+
+\SMEs: first appearance of SME(s) and will be expanded.
+
+\SME: second appearance of SME(s) and will be abbreviated. 
+
+\randd: first appearance of R\&D(s) and will be expanded
+
+\randds: second appearance of R\&D(s) and will be abbreviated.
+
+\SMEs: third appearance of SME(s) and will be abbreviated.
+
+\randds: third appearance of R\&D(s) and will be abbreviated.
+
+\SMEs: fourth appearance of SME(s) and will be abbreviated.
+
+\randd: fourth appearance of R\&D(s) and will be abbreviated.
+
+% Print the list of used abbreviations
+\printnomenclature
+
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "sample-abbrev"
+%%% End: 

@@ -1,0 +1,248 @@
+% \iffalse meta-comment
+% 
+% abbrev.ins
+% 
+% Copyright (C) 2013 by Thai Son Hoang <htson at inf dot ethz dot ch>
+% --------------------------------------------------------------------
+% 
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in:
+% 
+%      http://www.latex-project.org/lppl.txt
+% 
+% and version 1.3 or later is part of all distributions of LaTeX 
+% version 2003/12/01 or later.
+% 
+% This work has the LPPL maintenance status "author-maintained".
+% 
+% This work consists of the files abbrev.dtx, abbrev.ins,
+% the derived file abbrev.sty, the generated documentation
+% abbrev.pdf, and some sample requirements documents.
+% 
+% \fi
+% 
+% \iffalse
+%<reqdoc>\NeedsTeXFormat{LaTeX2e}\relax
+%<reqdoc>\ProvidesPackage{abbrev}
+%<reqdoc>    [2013/04/22 v1.0 Macros for abbreviations] 
+% 
+%<*driver> 
+\documentclass[a4paper]{ltxdoc}
+\usepackage{abbrev}
+\EnableCrossrefs
+% ^^A\CodelineIndex
+\PageIndex
+\RecordChanges
+
+\begin{document}
+\DocInput{abbrev.dtx}
+\end{document}
+%</driver>
+% \fi
+% 
+% \CheckSum{0}
+% 
+% \CharacterTable
+% {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+% Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+% Digits        \0\1\2\3\4\5\6\7\8\9
+% Exclamation   \!     Double quote  \"     Hash (number) \#
+% Dollar        \$     Percent       \%     Ampersand     \&
+% Acute accent  \'     Left paren    \(     Right paren   \)
+% Asterisk      \*     Plus          \+     Comma         \,
+% Minus         \-     Point         \.     Solidus       \/
+% Colon         \:     Semicolon     \;     Less than     \<
+% Equals        \=     Greater than  \>     Question mark \?
+% Commercial at \@     Left bracket  \[     Backslash     \\
+% Right bracket \]     Circumflex    \^     Underscore    \_
+% Grave accent  \`     Left brace    \{     Vertical bar  \|
+% Right brace   \}     Tilde         \~}
+% 
+% 
+% \changes{v1.0}{2013/04/22}{Initial version}
+% 
+% \GetFileInfo{abbrev.sty}
+% 
+% \DoNotIndex{\arabic}
+% \DoNotIndex{\newcommand,\renewcommand,\newenvironment,\renewenvironment}
+% \DoNotIndex{\newcounter,\value}
+% \DoNotIndex{\\,\hline}
+% \DoNotIndex{\begin,\end}
+% \DoNotIndex{\item,\medskip,\quad,\small}
+% \DoNotIndex{\label,\labelformat}
+% \DoNotIndex{\DeclareOption,\ProcessOptions,\RequirePackage}
+% \DoNotIndex{\ref,\refstepcounter,\setcounter}
+% \DoNotIndex{\textsf,\textwidth}
+%
+% \title{The \textsf{abbrev} package\thanks{This document
+% corresponds to \textsf{abbrev}~\fileversion, dated~\filedate.}}
+% \author{Thai Son Hoang \\ ETH-Zurich \\ \texttt{<htson at inf dot
+% ethz dot ch>}}
+% \date{April 22, 2013}
+% 
+% \maketitle
+% 
+% ^^A %%%%% Abstract %%%%%
+% \begin{abstract}
+%   This package provides macros for typesetting abbreviations.  It
+%   was developed at the Swiss Federal Institute of Technology Zurich
+%   (ETH-Zurich).
+% \end{abstract}
+% 
+% ^^A %%%%% Table of contents %%%%%
+% \tableofcontents
+% 
+% ^^A %%%%% Introduction %%%%%
+% \section{Introduction}
+% 
+% This package was developed in order to ease the typesetting of
+% abbreviations in \LaTeX{}.
+% 
+% ^^A %%%%% Usage %%%%%%
+% \section{Usage}
+% 
+% ^^A %%% Package option |compact| %%%
+% Just like any other package, you need to request this package with a
+% |\usepackage| command in the preamble.
+% 
+% \StopEventually{
+% \PrintChanges
+% \PrintIndex
+% }
+%
+% ^^A %%%%% Implementation %%%%%
+% \section{Implementation}
+%
+% ^^A %%% Package loading %%% 
+% The implementation is quite straightforward.  We first request the
+% |etoolbox| package for implementation purpose, |xspace| for
+% utilising the spacing, and |nomencl| for creating list of
+% abbreviations.
+% 
+% \iffalse ^^A BEGIN Produce comments only in the resulting style file
+%<reqdoc>
+%<reqdoc>%%%%% BEGIN Package loading %%%%%
+% \fi ^^A END Produce comments only in the resulting style file
+%
+%    \begin{macrocode}
+\RequirePackage{etoolbox}
+\RequirePackage{xspace}
+\RequirePackage{nomencl}
+%    \end{macrocode}
+%
+% \iffalse ^^A BEGIN Produce comments only in the resulting style file
+%<reqdoc>%%%%% END Package loading %%%%%
+%<reqdoc>
+% \fi ^^A END Produce comments only in the resulting style file
+%
+% In the subsequent, we define the main meta-macro for creating
+% abbreviation macros.
+% \begin{macro}{\newabbrev}
+%   \changes{v1.0}{2013/04/22}{Macro created}
+%   The |newabbrev|
+% 
+% \iffalse^^A BEGIN Produce comments only in the resulting style file
+%<*abbrev>
+
+% Meta-macro to create abbreviation macros.
+%
+% Arguments:
+% 1. (Optional) String to be used as macro
+% 2. The abbreviation (also used as the macro if the optional argument
+%    is empty)
+% 3. The full string expansion.
+%
+% Usage:
+% - \newabbrev{SME}{Small and Medium-sized Enterprise} will create
+% macros \SME and \SMEs.
+% - \newabbrev[randd]{R\&D}{Research and Development} will create
+% macros \randd and \randds.
+%</abbrev>
+% \fi^^A END Produce comments only in the resulting style file
+%    \begin{macrocode}
+\newcommand{\newabbrev}[3][]{%
+  \expandafter\ifstrequal\expandafter{#1}{}{
+    \abbrev@create{#2}{#2}{#3}
+  }{
+    \abbrev@create{#1}{#2}{#3}
+  }
+}
+
+%    \end{macrocode}
+% \end{macro} ^^A \newabbrev
+%
+% \begin{macro}{\resetabbrev}
+%   Reset the all abbreviation macros to full mode.
+%    \begin{macrocode}
+\newcommand{\resetabbrev}{
+  Reset the following macros:\\
+  \renewcommand*{\do}[1]{
+    Macros: ##1 \\
+    \csuse{##1@init}
+  }
+  \dolistloop{\abbrev@list}
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\abbrev@create}
+%   The main worker meta-macro for creating the abbreviation macros is
+%   implemented as follows.
+% \iffalse^^A BEGIN Produce comments only in the resulting style file
+%<*abbrev>
+
+% Worker meta-macro to create abbreviation macros.
+%
+% Arguments:
+% 1. String to be used as the new macro
+% 2. The abbreviation
+% 3. The full string expansion.
+%
+% Usage:
+% - \abbrev@create{SME}{SME}{Small and Medium-sized Enterprise} will create
+% macros \SME and \SMEs.
+% - \abbrev@create{randd}{R\&D}{Research and Development} will create
+% macros \randd and \randds.
+%</abbrev>
+% \fi^^A END Produce comments only in the resulting style file
+%    \begin{macrocode}
+\newcommand{\abbrev@create}[3]{%
+  \newtoggle{#1@toggle}
+  \listadd{\abbrev@list}{#1}
+  \abbrev@init{#1}{#2}{#3}
+  \csuse{#1@init}
+}
+
+\newcommand{\abbrev@init}[3]{%
+  \expandafter\def\csname#1@init\endcsname{%
+    \togglefalse{#1@toggle}
+    \expandafter\def\csname#1\endcsname{%
+      \iftoggle{#1@toggle}{%
+        #2\xspace
+      }{
+        \nomenclature{#2}{#3}
+        \toggletrue{#1@toggle}
+        #3 (#2)\xspace%
+      }
+      \expandafter\def\csname#1\endcsname{#2\xspace}%
+    }
+
+    \expandafter\def\csname#1s\endcsname{%
+      \iftoggle{#1@toggle}{%
+        #2s\xspace
+      }{
+        \nomenclature{#2}{#3}
+        \toggletrue{#1@toggle}
+        #3s (#2s)\xspace%
+      }
+      \expandafter\def\csname#1s\endcsname{#2s\xspace}%
+    }
+  }
+}
+%    \end{macrocode}
+% \end{macro}
+%
+%
+% \Finale
+\endinput
