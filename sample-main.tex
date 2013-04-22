@@ -11,41 +11,24 @@
 % This macro will not be used and hence will not appear in the list of abbreviations.
 \newabbrev{OECD}{Organisational for Economic and Cooperation Development}
 
-First occurrences of the macros will be expanded, such \SMEs and \randd{}.
+First occurrences of the macros will be expanded, such as \SMEs and \randd.
 
-\SME: second appearance of SME(s) and will be abbreviated. 
+Subsequent occurrences of the macros will be abbreviated, such as \SME
+and \randds.
 
-\randds: second appearance of R\&D(s) and will be abbreviated.
-
-\SMEs: third appearance of SME(s) and will be abbreviated.
-
-\randds: third appearance of R\&D(s) and will be abbreviated.
-
-\SMEs: fourth appearance of SME(s) and will be abbreviated.
-
-\randd: fourth appearance of R\&D(s) and will be abbreviated.
-
-\section{Section 2}
-\label{sec:section-2}
-
+The macros can be \emph{reset}.
 \resetabbrev
 
-\SMEs: first appearance of SME(s) and will be expanded.
+Afterwards, the behaviours of the abbreviations macros will be such
+that they have never been used.
 
-\SME: second appearance of SME(s) and will be abbreviated. 
+First occurrences of the macros will be expanded, such as \SMEs and \randd.
 
-\randd: first appearance of R\&D(s) and will be expanded
+Subsequent occurrences of the macros will be abbreviated, such as \SME
+and \randds.
 
-\randds: second appearance of R\&D(s) and will be abbreviated.
-
-\SMEs: third appearance of SME(s) and will be abbreviated.
-
-\randds: third appearance of R\&D(s) and will be abbreviated.
-
-\SMEs: fourth appearance of SME(s) and will be abbreviated.
-
-\randd: fourth appearance of R\&D(s) and will be abbreviated.
-
+The list of abbreviations can be printed.  Only the abbreviations used
+will be added to the list.
 % Print the list of used abbreviations
 \printnomenclature
 
