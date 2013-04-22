@@ -2,7 +2,7 @@ Macros for Requirements Documents
 =================================
 
 This package contains a documented style file for easily typesetting
-requirements documents in LaTeX.
+abbreviations in LaTeX.
 
 
 Installation
