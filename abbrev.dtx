@@ -296,26 +296,28 @@
     \togglefalse{#1@toggle}
     \expandafter\def\csname#1\endcsname{%
       \iftoggle{#1@toggle}{%
-        #2\xspace
-      }{
-        \nomenclature{#2}{#3}
-        \toggletrue{#1@toggle}
-        #3 (#2)\xspace%
-      }
+        #2%
+      }{%
+        \nomenclature{#2}{#3}%
+        \toggletrue{#1@toggle}%
+        #3 (#2)%
+      }%
       \expandafter\def\csname#1\endcsname{#2\xspace}%
+      \xspace%
     }
 
     \expandafter\def\csname#1s\endcsname{%
       \iftoggle{#1@toggle}{%
-        #2s\xspace
-      }{
-        \nomenclature{#2}{#3}
-        \toggletrue{#1@toggle}
-        #3s (#2s)\xspace%
-      }
+        #2s%
+      }{%
+        \nomenclature{#2}{#3}%
+        \toggletrue{#1@toggle}%
+        #3s (#2s)%
+      }%
       \expandafter\def\csname#1s\endcsname{#2s\xspace}%
-    }
-  }
+      \xspace%
+    }%
+  }%
 }
 %    \end{macrocode}
 % \end{macro}
