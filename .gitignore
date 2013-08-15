@@ -7,4 +7,5 @@
 *.log
 *.nlo
 *.nls
+*.rel
 *.toc
