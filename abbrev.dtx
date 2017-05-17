@@ -26,7 +26,7 @@
 % \iffalse
 %<abbrev>\NeedsTeXFormat{LaTeX2e}\relax
 %<abbrev>\ProvidesPackage{abbrev}
-%<abbrev>    [2017/05/16 v2.0 Package for typesetting abbreviations] 
+%<abbrev>    [2017/05/16 v1.1 Package for typesetting abbreviations] 
 % 
 %<*driver> 
 \documentclass[a4paper]{ltxdoc}
@@ -62,7 +62,7 @@
 % 
 % 
 % \changes{v1.0}{2013/04/22}{Initial version}
-% \changes{v2.0}{2017/05/16}{Change the APIs to address plural version of abbreviations}
+% \changes{v1.1}{2017/05/16}{Added command to address plural version of abbreviations}
 % 
 % \GetFileInfo{abbrev.sty}
 % 
@@ -228,7 +228,7 @@
 %
 % \begin{macro}{\newabbrev}
 %   \changes{v1.0}{2013/04/22}{Macro created}
-%   \changes{v2.0}{2017/05/16}{Allow explicit declaration of plural version}
+%   \changes{v1.1}{2017/05/16}{Change the implement to use newfullabbrev}
 %   The |newabbrev| makes use of the worker macro |newfullabbrev| for
 %   creating abbreviations macros.
 % 
@@ -261,7 +261,7 @@
 % \end{macro} ^^A \newabbrev
 %
 % \begin{macro}{\newfullabbrev}
-%   \changes{v2.0}{2017/05/16}{Macro created}
+%   \changes{v1.1}{2017/05/16}{Macro created}
 %   The |newfullabbrev| makes use of the worker macro |abbrev@create| for
 %   creating abbreviations macros.
 % 
@@ -286,7 +286,7 @@
 % - \newfullabbrev[randd]{R\&D}{Research and Development}{}{}{} will create
 % macros \randd will expand as Research and Development (R\&D)
 % and \randds will expand as Research and Developments (R\&Ds).
-% - \newfullabbrev{AS}{Autonomous System}{}{ASes}{} will create
+% - \newfullabbrev{AS}{Autonomous System}{ASes}{ASes}{} will create
 % macros \AS will expand as Autonomous System (AS) 
 % and \ASes will expand as Autonomous Systems (ASes).
 %</abbrev>
@@ -318,6 +318,8 @@
   }{
     \def\abbrev@plexpn{#6}
   }
+
+  % This code ensure that the arguments are expanded properly
   \begingroup\edef\z{\endgroup\noexpand\abbrev@create
   {\abbrev@sgcsname}{\abbrev@sgabbrev}{\abbrev@sgexpn}
   {\abbrev@plcsname}{\abbrev@plabbrev}{\abbrev@plexpn}}\z
@@ -327,7 +329,7 @@
 % \end{macro} ^^A \newfullabbrev
 %
 % \begin{macro}{\abbrev@create}
-%   \changes{v2.0}{2017/05/16}{Allow explicit declaration of plural version}
+%   \changes{v1.1}{2017/05/16}{Allow explicit declaration of plural version}
 %
 %   The main worker meta-macro for creating the abbreviation macros is
 %   implemented as follows.  It create a private toggle variable to
@@ -409,52 +411,39 @@
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\resetallabbrevs}
-%   \changes{v2.0}{2017/05/16}{Renamed marcro to resetallabbrevs}
+% \begin{macro}{\resetabbrev}
+%   \changes{v1.1}{2017/05/16}{Added optional argument to reset individual abbreviation}
 %   Reset the all abbreviation macros to full expansion mode by going
 %   through |abbrev@list| and call the initialisation macro for each
-%   abbreviation.
+%   abbreviation.  In the case where the optional argument is non-empty
+%   only the corresponding abbreviation is reset.
 % \iffalse^^A BEGIN Produce comments only in the resulting style file
 %<*abbrev>
 
-% Macro to reset all abbreviations.
+% Macro to reset all abbreviations or individual abbreviation if the optional 
+% argument is set
 %
 % Arguments:
+% - (Optional) abbreviation name
 %
 % Usage:
-% - \resetallabbrevs will reset all abreviations.
+% - \resetabbrev will reset all abreviations.
+% - \resetabbrev[SME] will reset \SME abbreviation.
 %</abbrev>
 % \fi^^A END Produce comments only in the resulting style file
 %    \begin{macrocode}
-\newcommand{\resetallabbrevs}{
-  \renewcommand*{\do}[1]{
-    \csuse{##1@init}
+\newcommand{\resetabbrev}[1][]{
+  \expandafter\ifstrequal\expandafter{#1}{}{
+    \renewcommand*{\do}[1]{
+      \csuse{##1@init}
+    }
+    \dolistloop{\abbrev@list}
+  }{
+    \csuse{#1@init}
   }
-  \dolistloop{\abbrev@list}
 }
 %    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\resetabbrev}
-%   \changes{v2.0}{2017/05/16}{Added macro to reset individual abbreviation}
-%   Reset the abbreviation macro to full expansion mode by calling the initialisation macro
-% for each input abbreviation.
-% \iffalse^^A BEGIN Produce comments only in the resulting style file
-%<*abbrev>
-
-% Macro to reset an input abbreviation.
-%
-% Arguments:
-%
-% Usage:
-% - \resetabbrev{myabbrev} will reset \myabbrev and \myabbrevs to full expansion mode.
-%</abbrev>
-% \fi^^A END Produce comments only in the resulting style file
-%    \begin{macrocode}
-\newcommand{\resetabbrev}[1]{
-  \csuse{#1@init}
-}
-%    \end{macrocode}
-% \end{macro}
+% \end{macro} ^^A \resetabbrev
 %
 % \Finale
 \endinput

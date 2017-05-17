@@ -22,7 +22,7 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}\relax
 \ProvidesPackage{abbrev}
-    [2017/05/16 v2.0 Package for typesetting abbreviations]
+    [2017/05/16 v1.1 Package for typesetting abbreviations]
 
 %%%%% BEGIN Package loading %%%%%
 \RequirePackage{etoolbox}
@@ -62,6 +62,8 @@
   }{
     \def\abbrev@plexpn{#6}
   }
+
+  % This code ensure that the arguments are expanded properly
   \begingroup\edef\z{\endgroup\noexpand\abbrev@create
   {\abbrev@sgcsname}{\abbrev@sgabbrev}{\abbrev@sgexpn}
   {\abbrev@plcsname}{\abbrev@plabbrev}{\abbrev@plexpn}}\z
@@ -104,15 +106,15 @@
   }%
 }
 
-\newcommand{\resetallabbrevs}{
-  \renewcommand*{\do}[1]{
-    \csuse{##1@init}
+\newcommand{\resetabbrev}[1][]{
+  \expandafter\ifstrequal\expandafter{#1}{}{
+    \renewcommand*{\do}[1]{
+      \csuse{##1@init}
+    }
+    \dolistloop{\abbrev@list}
+  }{
+    \csuse{#1@init}
   }
-  \dolistloop{\abbrev@list}
-}
-
-\newcommand{\resetabbrev}[1]{
-  \csuse{#1@init}
 }
 \endinput
 %%

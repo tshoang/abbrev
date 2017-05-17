@@ -12,7 +12,7 @@ We first create some abbreviations.
 \newabbrev[randd]{R\&D}{Research \& Development}
 \newabbrev{OECD}{Organisational for 
         Economic and Cooperation Development}
-\newfullabbrev{AS}{Autonomous System}{}{ASes}{}
+\newfullabbrev{AS}{Autonomous System}{ASes}{ASes}{}
 \end{verbatim}
 \newabbrev{SME}{Small and Medium-sized Enterprise}
 \newabbrev[randd]{R\&D}{Research \& Development}
@@ -25,8 +25,8 @@ First occurrences of the abbreviations will be expanded, for example \verb|\SMEs
 
 Subsequent occurrences of the macros will be abbreviated, such as \verb|\SME| gives \SME and, and \verb|\randds| gives \randds, and \verb|\AS| gives \AS.
 
-The abbreviations can be \emph{reset} using \verb|\resetallabbrevs|.
-\resetallabbrevs
+The abbreviations can be \emph{reset} using \verb|\resetabbrev|.
+\resetabbrev
 
 Afterwards, the behaviours of the abbreviations macros will be such that they have never been used.
 
@@ -34,8 +34,8 @@ First occurrences of the abbreviations will be expanded, for example \verb|\SMEs
 
 Subsequent occurrences of the macros will be abbreviated, such as \verb|\SME| gives \SME and, and \verb|\randds| gives \randds, and \verb|\AS| gives \AS.
  
-Abbreviation can be reset \emph{individually}, e.g., \verb|\resetabbrev{SME}| reset \verb|\SME| command.
-\resetabbrev{SME}
+Abbreviation can be reset \emph{individually}, e.g., \verb|\resetabbrev[SME]| reset \verb|\SME| command.
+\resetabbrev[SME]
 
 See that \verb|\SMEs| is now fully expanded as \SMEs, but \verb|\randds| is still abbreviated as \randds and \verb|\AS| is still abbreviated as \AS.
 
