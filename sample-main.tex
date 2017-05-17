@@ -8,15 +8,16 @@
 We first create some abbreviations.
 % Create some abbreviation macros
 \begin{verbatim}
-\newabbrev{SME}{Small and Medium-sized Enterprise}{}{}{}
-\newabbrev[randd]{R\&D}{Research \& Development}{}{}{}
-\newabbrev{OECD}{Organisational for Economic and Cooperation Development}{}{}{}
-\newabbrev{AS}{Autonomous System}{}{ASes}{}
+\newabbrev{SME}{Small and Medium-sized Enterprise}
+\newabbrev[randd]{R\&D}{Research \& Development}
+\newabbrev{OECD}{Organisational for 
+        Economic and Cooperation Development}
+\newfullabbrev{AS}{Autonomous System}{}{ASes}{}
 \end{verbatim}
-\newabbrev{SME}{Small and Medium-sized Enterprise}{}{}{}
-\newabbrev[randd]{R\&D}{Research \& Development}{}{}{}
-\newabbrev{OECD}{Organisational for Economic and Cooperation Development}{}{}{}
-\newabbrev{AS}{Autonomous System}{ASes}{ASes}{}
+\newabbrev{SME}{Small and Medium-sized Enterprise}
+\newabbrev[randd]{R\&D}{Research \& Development}
+\newabbrev{OECD}{Organisational for Economic and Cooperation Development}
+\newfullabbrev{AS}{Autonomous System}{ASes}{ASes}{}
 
 % This macro will not be used and hence will not appear in the list of abbreviations.
 
@@ -38,7 +39,7 @@ Abbreviation can be reset \emph{individually}, e.g., \verb|\resetabbrev{SME}| re
 
 See that \verb|\SMEs| is now fully expanded as \SMEs, but \verb|\randds| is still abbreviated as \randds and \verb|\AS| is still abbreviated as \AS.
 
-The list of abbreviations can be printed.  Only the used abbreviations will be added to the list. Notice that \verb|\OECD| is not in the list.
+The list of abbreviations can be printed.  Only the used abbreviations will be added to the list. Notice that \verb|OECD| is not in the list.
 
 % Print the list of used abbreviations
 \printnomenclature

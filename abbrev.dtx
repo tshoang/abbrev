@@ -229,7 +229,40 @@
 % \begin{macro}{\newabbrev}
 %   \changes{v1.0}{2013/04/22}{Macro created}
 %   \changes{v2.0}{2017/05/16}{Allow explicit declaration of plural version}
-%   The |newabbrev| makes use of the worker macro |abbrev@create| for
+%   The |newabbrev| makes use of the worker macro |newfullabbrev| for
+%   creating abbreviations macros.
+% 
+% \iffalse^^A BEGIN Produce comments only in the resulting style file
+%<*abbrev>
+
+% Meta-macro to create abbreviation macros.
+%
+% Arguments:
+% 1. (Optional) String to be used as macro
+% 2. The abbreviation (also used as the macro if the optional argument
+%    is empty)
+% 3. The full string expansion.
+%
+% Usage:
+% - \newabbrev{SME}{Small and Medium-sized Enterprise} will create
+% macros \SME will expand as Small and Medium-sized Enterprise (SME)
+% and \SMEs will expand as Small and Medium-sized Enterprises (SMEs).
+% - \newabbrev[randd]{R\&D}{Research and Development} will create
+% macros \randd will expand as Research and Development (R\&D)
+% and \randds will expand as Research and Developments (R\&Ds).
+%</abbrev>
+% \fi^^A END Produce comments only in the resulting style file
+%    \begin{macrocode}
+\newcommand{\newabbrev}[3][]{%
+  \newfullabbrev[#1]{#2}{#3}{}{}{}
+}
+
+%    \end{macrocode}
+% \end{macro} ^^A \newabbrev
+%
+% \begin{macro}{\newfullabbrev}
+%   \changes{v2.0}{2017/05/16}{Macro created}
+%   The |newfullabbrev| makes use of the worker macro |abbrev@create| for
 %   creating abbreviations macros.
 % 
 % \iffalse^^A BEGIN Produce comments only in the resulting style file
@@ -247,19 +280,19 @@
 % 6. The plural expansion string (empty to use the s-suffix singular version)
 %
 % Usage:
-% - \newabbrev{SME}{Small and Medium-sized Enterprise}{}{}{} will create
+% - \newfullabbrev{SME}{Small and Medium-sized Enterprise}{}{}{} will create
 % macros \SME will expand as Small and Medium-sized Enterprise (SME)
 % and \SMEs will expand as Small and Medium-sized Enterprises (SMEs).
-% - \newabbrev[randd]{R\&D}{Research and Development}{}{}{} will create
+% - \newfullabbrev[randd]{R\&D}{Research and Development}{}{}{} will create
 % macros \randd will expand as Research and Development (R\&D)
 % and \randds will expand as Research and Developments (R\&Ds).
-% - \newabbrev{AS}{Autonomous System}{}{ASes}{} will create
+% - \newfullabbrev{AS}{Autonomous System}{}{ASes}{} will create
 % macros \AS will expand as Autonomous System (AS) 
 % and \ASes will expand as Autonomous Systems (ASes).
 %</abbrev>
 % \fi^^A END Produce comments only in the resulting style file
 %    \begin{macrocode}
-\newcommand{\newabbrev}[6][]{%
+\newcommand{\newfullabbrev}[6][]{%
   \expandafter\ifstrequal\expandafter{#1}{}{
     \def\abbrev@sgcsname{#2}
   }{
@@ -291,7 +324,7 @@
 }
 
 %    \end{macrocode}
-% \end{macro} ^^A \newabbrev
+% \end{macro} ^^A \newfullabbrev
 %
 % \begin{macro}{\abbrev@create}
 %   \changes{v2.0}{2017/05/16}{Allow explicit declaration of plural version}

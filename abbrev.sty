@@ -31,7 +31,12 @@
 %%%%% END Package loading %%%%%
 
 
-\newcommand{\newabbrev}[6][]{%
+\newcommand{\newabbrev}[3][]{%
+  \newfullabbrev[#1]{#2}{#3}{}{}{}
+}
+
+
+\newcommand{\newfullabbrev}[6][]{%
   \expandafter\ifstrequal\expandafter{#1}{}{
     \def\abbrev@sgcsname{#2}
   }{
