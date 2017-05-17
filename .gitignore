@@ -8,4 +8,5 @@
 *.nlo
 *.nls
 *.rel
+*.synctex.gz
 *.toc

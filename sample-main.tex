@@ -1,38 +1,50 @@
+\usepackage{verbatim}
 \title{A Sample Document for the usages of \textsf{abbrev} package}
-\author{Thai Son Hoang\\ETH Zurich\\\texttt{<htson at inf dot ethz dot
-    ch>}}
+\author{Thai Son Hoang\\ECS, University of Southampton\\\texttt{<T dot S dot Hoang at ecs dot soton dot ac dot uk>}}
 
 \begin{document}
 \maketitle
 
+We first create some abbreviations.
 % Create some abbreviation macros
-\newabbrev{SME}{Small and Medium-sized Enterprise}
-\newabbrev[randd]{R\&D}{Research \& Development}
+\begin{verbatim}
+\newabbrev{SME}{Small and Medium-sized Enterprise}{}{}{}
+\newabbrev[randd]{R\&D}{Research \& Development}{}{}{}
+\newabbrev{OECD}{Organisational for Economic and Cooperation Development}{}{}{}
+\newabbrev{AS}{Autonomous System}{}{ASes}{}
+\end{verbatim}
+\newabbrev{SME}{Small and Medium-sized Enterprise}{}{}{}
+\newabbrev[randd]{R\&D}{Research \& Development}{}{}{}
+\newabbrev{OECD}{Organisational for Economic and Cooperation Development}{}{}{}
+\newabbrev{AS}{Autonomous System}{ASes}{ASes}{}
+
 % This macro will not be used and hence will not appear in the list of abbreviations.
-\newabbrev{OECD}{Organisational for Economic and Cooperation Development}
 
-First occurrences of the macros will be expanded, such as \SMEs and \randd.
+First occurrences of the abbreviations will be expanded, for example \verb|\SMEs| gives \SMEs, \verb|\randd| gives \randd, and \verb|\ASes| gives \ASes.
 
-Subsequent occurrences of the macros will be abbreviated, such as \SME
-and \randds.
+Subsequent occurrences of the macros will be abbreviated, such as \verb|\SME| gives \SME and, and \verb|\randds| gives \randds, and \verb|\AS| gives \AS.
 
-The macros can be \emph{reset}.
-\resetabbrev
+The abbreviations can be \emph{reset} using \verb|\resetallabbrevs|.
+\resetallabbrevs
 
-Afterwards, the behaviours of the abbreviations macros will be such
-that they have never been used.
+Afterwards, the behaviours of the abbreviations macros will be such that they have never been used.
 
-First occurrences of the macros will be expanded, such as \SMEs and \randd.
+First occurrences of the abbreviations will be expanded, for example \verb|\SMEs| gives \SMEs, \verb|\randd| gives \randd, and \verb|\ASes| gives \ASes.
 
-Subsequent occurrences of the macros will be abbreviated, such as \SME
-and \randds.
+Subsequent occurrences of the macros will be abbreviated, such as \verb|\SME| gives \SME and, and \verb|\randds| gives \randds, and \verb|\AS| gives \AS.
+ 
+Abbreviation can be reset \emph{individually}, e.g., \verb|\resetabbrev{SME}| reset \verb|\SME| command.
+\resetabbrev{SME}
 
-The list of abbreviations can be printed.  Only the abbreviations used
-will be added to the list.
+See that \verb|\SMEs| is now fully expanded as \SMEs, but \verb|\randds| is still abbreviated as \randds and \verb|\AS| is still abbreviated as \AS.
+
+The list of abbreviations can be printed.  Only the used abbreviations will be added to the list. Notice that \verb|\OECD| is not in the list.
+
 % Print the list of used abbreviations
 \printnomenclature
 
 \end{document}
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "sample-abbrev"

@@ -16,7 +16,7 @@ sample-abbrev.pdf: sample-abbrev.tex sample-main.tex abbrev.sty
 	pdflatex sample-abbrev.tex
 
 clean:
-	rm -f *.aux abbrev.glo abbrev.gls abbrev.idx abbrev.ind sample-abbrev.ilg *.log sample-abbrev.nlo sample-abbrev.nls abbrev.toc
+	rm -f *.aux abbrev.glo abbrev.gls abbrev.idx abbrev.ilg abbrev.ind sample-abbrev.ilg *.log sample-abbrev.nlo sample-abbrev.nls abbrev.toc
 
 cleanall: clean
 	rm -f abbrev.pdf abbrev.sty sample-abbrev.pdf

@@ -2,7 +2,7 @@
 % 
 % abbrev.ins
 % 
-% Copyright (C) 2013 by Thai Son Hoang <htson at inf dot ethz dot ch>
+% Copyright (C) 2013, 2017 by Thai Son Hoang <T dot S dot Hoang at ecs dot soton dot ac dot uk>
 % --------------------------------------------------------------------
 % 
 % This file may be distributed and/or modified under the
@@ -26,7 +26,7 @@
 % \iffalse
 %<abbrev>\NeedsTeXFormat{LaTeX2e}\relax
 %<abbrev>\ProvidesPackage{abbrev}
-%<abbrev>    [2013/04/22 v1.0 Macros for abbreviations] 
+%<abbrev>    [2017/05/16 v2.0 Package for typesetting abbreviations] 
 % 
 %<*driver> 
 \documentclass[a4paper]{ltxdoc}
@@ -62,6 +62,7 @@
 % 
 % 
 % \changes{v1.0}{2013/04/22}{Initial version}
+% \changes{v2.0}{2017/05/16}{Change the APIs to address plural version of abbreviations}
 % 
 % \GetFileInfo{abbrev.sty}
 % 
@@ -88,17 +89,17 @@
 %
 % \title{The \textsf{abbrev} package\thanks{This document
 % corresponds to \textsf{abbrev}~\fileversion, dated~\filedate.}}
-% \author{Thai Son Hoang \\ ETH-Zurich \\ \texttt{<htson at inf dot
-% ethz dot ch>}}
-% \date{April 22, 2013}
+% \author{Thai Son Hoang \\ ECS, University of Southampton \\ \texttt{<T dot S dot Hoang at ecs dot
+% soton dot ac dot uk>}}
+% \date{May 16, 2017}
 % 
 % \maketitle
 % 
 % ^^A %%%%% Abstract %%%%%
 % \begin{abstract}
 %   This package provides macros for typesetting abbreviations.  It
-%   was developed at the Swiss Federal Institute of Technology Zurich
-%   (ETH-Zurich).
+%   was developed initially at the Swiss Federal Institute of Technology Zurich
+%   (ETH-Zurich) and subsequently at the University of Southampton.
 % \end{abstract}
 % 
 % ^^A %%%%% Table of contents %%%%%
@@ -130,35 +131,45 @@
 % (meta-)macro for creating abbreviation macros and their expected
 % behaviour.
 % 
+% \subsection{Creating Abbreviations}
 % ^^A %%% \newabbrev macros %%%
 % \DescribeMacro{\newabbrev}
 % Macro |\newabbrev| is a meta-macro that creating several
 % abbreviation macros.  The signature of |\newabbrev| is as follows.
 %
-% \indent |\newabbrev|\oarg{csname}\marg{abbreviation}\marg{full string}
+% \indent |\newabbrev|\oarg{csname}\marg{abbreviation}\marg{expansion string}
 %
-% The first optional argument is the \emph{control sequence} name that
-% will be use to create abbreviation macros.  If the first optional
-% argument is undefined, the second argument representing the
-% \emph{abbreviation} will be used as the control sequence.  The third
+% \indent \hspace{2em}{\marg{plural-csname}} {\marg{plural-abbreviation}{\marg{plural-expansion-string}}
+%
+% The first optional argument |csname| is the \emph{control sequence} name that
+% will be use to create the abbreviation macro, i.e., the marco will be |\csname|.
+%  If the first optional argument is omitted, the second argument representing the
+% |abbreviation| will be used as the control sequence.  The third
 % argument is the \emph{full expansion string} of for the abbreviation.
-%
+% A plural macro for the abbreviation is also created. By default, the plural control
+% sequence name, the plural abbreviation and the plural expansion string
+% correspond to singular version with an additional |s|.  In the case where it should
+% be defined differently, it can be declared as the additional argument |plural-csname|,
+% |plural-abbreviation|, |plural-expansion-string|.
+% 
 % An invocation of the above |\newabbrev| with control sequence
 % |csname| will create the following macros:
 % \begin{itemize}
 % \item |\csname|: Singular version of the abbreviation macro.
-% \item |\csnames|: Plural version of the abbreviation macro.
+% \item |\csnames|: Plural version of the abbreviation macro (with an additional |s|).
 % \end{itemize}
 % 
 % First time usage of |\csname| will be replaced by ``full string
 % (abbreviation)''.  Subsequent uses of |\csname| will be replaced by
-% ``abbreviation''. Macro |\csnams| is the plural version (with \emph{s}
-% after the ``full string'' and the ``abbreviation'' accordingly).
+% ``abbreviation''. Macro |\csnames| is the plural version macro.
 %
+% \subsection{Resetting Abbreviations}
 % \DescribeMacro{\resetabbrev}
 % The above expansion behaviour can be reset by calling
-% |\resetabbrev|.  Afterwards, |\csname| and |\csnames| will be
-% expanded the first time that they are used.
+% |\resetallabbrev|.  Afterwards, |\csname| and |\csnames| will be
+% expanded the first time that they are used.  Individual abbreviation |\csname|
+% can be reset by |\resetabbrev{csname}| (Here |csname| is the control sequence 
+% corresponding to the singular version of the macro.
 % 
 % More information can be found in the accompanying sample document.
 %
@@ -217,6 +228,7 @@
 %
 % \begin{macro}{\newabbrev}
 %   \changes{v1.0}{2013/04/22}{Macro created}
+%   \changes{v2.0}{2017/05/16}{Allow explicit declaration of plural version}
 %   The |newabbrev| makes use of the worker macro |abbrev@create| for
 %   creating abbreviations macros.
 % 
@@ -230,27 +242,60 @@
 % 2. The abbreviation (also used as the macro if the optional argument
 %    is empty)
 % 3. The full string expansion.
+% 4. The control sequence for plural version (empty to use the s-suffix singular version)
+% 5. The plural abbreviation (empty to use the s-suffix singular version)
+% 6. The plural expansion string (empty to use the s-suffix singular version)
 %
 % Usage:
-% - \newabbrev{SME}{Small and Medium-sized Enterprise} will create
-% macros \SME and \SMEs.
-% - \newabbrev[randd]{R\&D}{Research and Development} will create
-% macros \randd and \randds.
+% - \newabbrev{SME}{Small and Medium-sized Enterprise}{}{}{} will create
+% macros \SME will expand as Small and Medium-sized Enterprise (SME)
+% and \SMEs will expand as Small and Medium-sized Enterprises (SMEs).
+% - \newabbrev[randd]{R\&D}{Research and Development}{}{}{} will create
+% macros \randd will expand as Research and Development (R\&D)
+% and \randds will expand as Research and Developments (R\&Ds).
+% - \newabbrev{AS}{Autonomous System}{}{ASes}{} will create
+% macros \AS will expand as Autonomous System (AS) 
+% and \ASes will expand as Autonomous Systems (ASes).
 %</abbrev>
 % \fi^^A END Produce comments only in the resulting style file
 %    \begin{macrocode}
-\newcommand{\newabbrev}[3][]{%
+\newcommand{\newabbrev}[6][]{%
   \expandafter\ifstrequal\expandafter{#1}{}{
-    \abbrev@create{#2}{#2}{#3}
+    \def\abbrev@sgcsname{#2}
   }{
-    \abbrev@create{#1}{#2}{#3}
+    \def\abbrev@sgcsname{#1}
   }
+  \def\abbrev@sgabbrev{#2}
+  \def\abbrev@sgexpn{#3}
+
+  \expandafter\ifstrequal\expandafter{#4}{}{
+    \edef\abbrev@plcsname{\abbrev@sgcsname s}
+  }{
+    \def\abbrev@plcsname{#4}
+  }
+
+  \expandafter\ifstrequal\expandafter{#5}{}{
+    \edef\abbrev@plabbrev{\abbrev@sgabbrev s}
+  }{
+    \def\abbrev@plabbrev{#5}
+  }
+
+  \expandafter\ifstrequal\expandafter{#6}{}{
+    \edef\abbrev@plexpn{\abbrev@sgexpn s}
+  }{
+    \def\abbrev@plexpn{#6}
+  }
+  \begingroup\edef\z{\endgroup\noexpand\abbrev@create
+  {\abbrev@sgcsname}{\abbrev@sgabbrev}{\abbrev@sgexpn}
+  {\abbrev@plcsname}{\abbrev@plabbrev}{\abbrev@plexpn}}\z
 }
 
 %    \end{macrocode}
 % \end{macro} ^^A \newabbrev
 %
 % \begin{macro}{\abbrev@create}
+%   \changes{v2.0}{2017/05/16}{Allow explicit declaration of plural version}
+%
 %   The main worker meta-macro for creating the abbreviation macros is
 %   implemented as follows.  It create a private toggle variable to
 %   be used to distinguish the first time usage of the abbreviation.
@@ -265,22 +310,32 @@
 % Worker meta-macro to create abbreviation macros.
 %
 % Arguments:
-% 1. String to be used as the new macro
-% 2. The abbreviation
-% 3. The full string expansion.
+% 1. (Singular) control sequence
+% 2. (Singular) abbreviation
+% 3. (Singular) expansion string.
+% 4. (Plural) control sequence
+% 5. (Plural) abbreviation
+% 6. (Plural) expansion string.
 %
 % Usage:
-% - \abbrev@create{SME}{SME}{Small and Medium-sized Enterprise} will create
-% macros \SME and \SMEs.
-% - \abbrev@create{randd}{R\&D}{Research and Development} will create
+% - will create
 % macros \randd and \randds.
+% - \abbrev@create{SME}{SME}{Small and Medium-sized Enterprise}{SMEs}{SMEs}{Small and Medium-sized Enterprises} will create
+% macros \SME will expand as Small and Medium-sized Enterprise (SME)
+% and \SMEs will expand as Small and Medium-sized Enterprises (SMEs).
+% - \abbrev@create{randd}{R\&D}{Research and Development}{randds}{R\&Ds}{Research and Developments} will create
+% macros \randd will expand as Research and Development (R\&D)
+% and \randds will expand as Research and Developments (R\&Ds).
+% - \abbrev@create{AS}{AS}{Autonomous System}{ASes}{ASes}{Autonomous Systems} will create
+% macros \AS will expand as Autonomous System (AS) 
+% and \ASes will expand as Autonomous Systems (ASes).
 %</abbrev>
 % \fi^^A END Produce comments only in the resulting style file
 %    \begin{macrocode}
-\newcommand{\abbrev@create}[3]{%
+\newcommand{\abbrev@create}[6]{%
   \newtoggle{#1@toggle}
   \listadd{\abbrev@list}{#1}
-  \abbrev@init{#1}{#2}{#3}
+  \abbrev@init{#1}{#2}{#3}{#4}{#5}{#6}
   \csuse{#1@init}
 }
 
@@ -291,7 +346,7 @@
 %   This macro create the initialisation meta-macro for creating the
 %   abbreviation macros.
 %    \begin{macrocode}
-\newcommand{\abbrev@init}[3]{%
+\newcommand{\abbrev@init}[6]{%
   \expandafter\def\csname#1@init\endcsname{%
     \togglefalse{#1@toggle}
     \expandafter\def\csname#1\endcsname{%
@@ -306,31 +361,64 @@
       \xspace%
     }
 
-    \expandafter\def\csname#1s\endcsname{%
+    \expandafter\def\csname#4\endcsname{%
       \iftoggle{#1@toggle}{%
-        #2s%
+        #5%
       }{%
         \nomenclature{#2}{#3}%
         \toggletrue{#1@toggle}%
-        #3s (#2s)%
+        #6 (#5)%
       }%
-      \expandafter\def\csname#1s\endcsname{#2s\xspace}%
+      \expandafter\def\csname#4\endcsname{#5\xspace}%
       \xspace%
     }%
   }%
 }
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\resetabbrev}
+% \begin{macro}{\resetallabbrevs}
+%   \changes{v2.0}{2017/05/16}{Renamed marcro to resetallabbrevs}
 %   Reset the all abbreviation macros to full expansion mode by going
 %   through |abbrev@list| and call the initialisation macro for each
 %   abbreviation.
+% \iffalse^^A BEGIN Produce comments only in the resulting style file
+%<*abbrev>
+
+% Macro to reset all abbreviations.
+%
+% Arguments:
+%
+% Usage:
+% - \resetallabbrevs will reset all abreviations.
+%</abbrev>
+% \fi^^A END Produce comments only in the resulting style file
 %    \begin{macrocode}
-\newcommand{\resetabbrev}{
+\newcommand{\resetallabbrevs}{
   \renewcommand*{\do}[1]{
     \csuse{##1@init}
   }
   \dolistloop{\abbrev@list}
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\resetabbrev}
+%   \changes{v2.0}{2017/05/16}{Added macro to reset individual abbreviation}
+%   Reset the abbreviation macro to full expansion mode by calling the initialisation macro
+% for each input abbreviation.
+% \iffalse^^A BEGIN Produce comments only in the resulting style file
+%<*abbrev>
+
+% Macro to reset an input abbreviation.
+%
+% Arguments:
+%
+% Usage:
+% - \resetabbrev{myabbrev} will reset \myabbrev and \myabbrevs to full expansion mode.
+%</abbrev>
+% \fi^^A END Produce comments only in the resulting style file
+%    \begin{macrocode}
+\newcommand{\resetabbrev}[1]{
+  \csuse{#1@init}
 }
 %    \end{macrocode}
 % \end{macro}
