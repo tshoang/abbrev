@@ -10,3 +10,4 @@
 *.rel
 *.synctex.gz
 *.toc
+.gradle
