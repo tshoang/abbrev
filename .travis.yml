@@ -15,3 +15,5 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+    - /tmp/texlive
+    - $HOME/.texlive
